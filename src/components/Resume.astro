@@ -1,0 +1,16 @@
+---
+const { title, desc, keywords } = Astro.props;
+---
+
+<div class="single-item">
+  <h3>{title}</h3>
+  <div class="project-desc project-desc-list w-richtext">
+    <ul role="list">
+      {desc.map(item => <li>{item}</li>)}
+    </ul>
+  </div>
+  <div class="mini-label-white">Keywords</div>
+  <div class="chips-container">
+    {keywords.map(keywordItem => <div class="single-chip">{keywordItem}</div>)}
+  </div>
+</div>

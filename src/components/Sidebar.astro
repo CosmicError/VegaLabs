@@ -1,0 +1,146 @@
+---
+const { selectedItem } = Astro.props;
+---
+
+<aside
+  data-animation="default"
+  data-collapse="medium"
+  data-duration="400"
+  data-easing="ease"
+  data-easing2="ease"
+  role="banner"
+  class="sidebar w-nav"
+>
+  <div class="nav-content">
+    <a href="/" class="w-nav-brand" aria-label="home">
+      <div class="niv-data">
+        <!-- <img
+          src="/assets/sam.jpg"
+          loading="eager"
+          alt="Profile picture"
+          class="niv-image"
+        /> -->
+        <div>
+          <div class="label-white">Jack Vega</div>
+          <div class="label-gray">Reverse Engineer</div>
+        </div>
+      </div>
+    </a>
+
+    <nav role="navigation" class="w-nav-menu">
+      <a
+        href="/"
+        class={`nav-link-container w-inline-block ${
+          selectedItem === "home" ? "w--current" : ""
+        }`}
+      >
+        <img
+          src="/assets/home.svg"
+          loading="eager"
+          alt=""
+          class="nav-link-image"
+        />
+        <div>Home</div>
+      </a>
+      <a
+        href="/resumes"
+        class={`nav-link-container w-inline-block ${
+          selectedItem === "resumes" ? "w--current" : ""
+        }`}
+        aria-current={selectedItem === "resumes" ? "page" : undefined}
+      >
+        <img
+          src="/assets/resume.svg"
+          loading="eager"
+          alt=""
+          class="nav-link-image"
+        />
+        <div>Resumes</div>
+      </a>
+      <a
+        href="/reverse-engineering"
+        class={`nav-link-container w-inline-block ${
+          selectedItem === "reverse-engineering" ? "w--current" : ""
+        }`}
+      >
+        <img
+          src="/assets/favorite.svg"
+          loading="eager"
+          alt=""
+          class="nav-link-image"
+        />
+        <div>Reverse engineering</div>
+      </a>
+      <a
+        href="/software-development"
+        class={`nav-link-container w-inline-block ${
+          selectedItem === "software-development" ? "w--current" : ""
+        }`}
+        aria-current={selectedItem === "software-development"
+          ? "page"
+          : undefined}
+      >
+        <img
+          src="/assets/code.svg"
+          loading="eager"
+          alt=""
+          class="nav-link-image"
+        />
+        <div>Software development</div>
+      </a>
+    </nav>
+    <a
+      href="/credits"
+      class={`nav-link-container w-inline-block sidebar-bottom-link ${
+        selectedItem === "credits" ? "w--current" : ""
+      }`}
+      aria-current={selectedItem === "credits" ? "page" : undefined}
+    >
+      <img
+        src="/assets/credits.svg"
+        loading="eager"
+        alt=""
+        class="nav-link-image"
+      />
+      <div>Credits</div>
+    </a>
+
+    <div
+      class="navbar-icon-button w-nav-button"
+      style="-webkit-user-select: text;"
+      aria-label="menu"
+      role="button"
+      tabindex="0"
+    >
+      <img src="/assets/menu.svg" loading="eager" alt="" class="navbar-icon" />
+    </div>
+  </div>
+
+  <script>
+    import { setupNav } from "../scripts/nav.js";
+
+    let cleanup;
+    document.addEventListener("astro:page-load", () => {
+      if (cleanup) cleanup();
+      cleanup = setupNav();
+    });
+
+    document.addEventListener("astro:before-swap", () => {
+      if (cleanup) cleanup();
+    });
+  </script>
+
+  <style>
+    .w-nav-menu {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+
+    .nav-links {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+  </style>
+</aside>

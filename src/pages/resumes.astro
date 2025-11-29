@@ -1,0 +1,101 @@
+---
+import Header from "../components/Header.astro";
+import Resume from "../components/Resume.astro";
+import Sidebar from "../components/Sidebar.astro";
+
+const resumes = [
+  {
+    title: "Reverse Engineering",
+    slug: "reversing-resume",
+    desc: [
+      "Detailed resume outlining academic, research, and professional experience in cybersecurity and reverse engineering.",
+      "Includes project work showcasing static and dynamic analysis, software deobfuscation, function hooking, and tooling development.",
+      "Highlights practical applications of cybersecurity methodologies and secure software design.",
+    ],
+    keywords: [
+      "Cybersecurity",
+      "Reverse Engineering",
+      "Malware Analysis",
+      "Software Exploitation",
+      "System Architecture",
+      "Python",
+      "C++",
+      "C#",
+    ],
+    doc: "https://docs.google.com/document/d/1vq0oOia3rnEmJH9k46A-wxNwhNEvONlR/view",
+  },
+  {
+    title: "Software Engineering",
+    slug: "software-resume",
+    desc: [
+      "Comprehensive resume focusing on backend and software engineering experience.",
+      "Highlights full-stack development, cloud architecture, algorithm design, and system implementation skills.",
+      "Showcases university projects, hands-on hardware/software integration, and teaching experience in programming fundamentals.",
+    ],
+    keywords: [
+      "Software Engineering",
+      "Backend Development",
+      "Python",
+      "C#",
+      "Rust",
+      "System Design",
+    ],
+    doc: "https://docs.google.com/document/d/1LstuhS9PGSrAqezJtpS2VEKw19_F-1Qe/view",
+  },
+];
+---
+
+<!doctype html>
+<html>
+  <Header title="Resumes | Jack Vega" />
+  <body>
+    <div class="content">
+      <Sidebar selectedItem="resumes" />
+      <div class="back-nav-container">
+        <a href="/" class="back-nav-button w-inline-block">
+          <img
+            src="/assets/back.svg"
+            loading="lazy"
+            alt="Back"
+            class="back-nav-img"
+          />
+          <div>Back</div>
+        </a>
+      </div>
+      <nav class="main">
+        <div class="container">
+          <div class="content-container">
+            <h1>Resumes</h1>
+            <section class="items-container">
+              <div class="resource-items">
+                {
+                  resumes.map((project) => (
+                    <a href={`/resumes/${project.slug}`} class="resume-card">
+                      <Resume
+                        title={project.title}
+                        desc={project.desc}
+                        keywords={project.keywords}
+                      />
+                    </a>
+                  ))
+                }
+              </div>
+            </section>
+          </div>
+        </div>
+      </nav>
+    </div>
+
+    <!--[if lte IE 9]><script src="//cdnjs.cloudflare.com/ajax/libs/placeholders/3.0.2/placeholders.min.js"></script><![endif]-->
+  </body><style>
+    .main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      color: #fff;
+      overflow-y: auto;
+      padding: 2rem 2rem 4rem;
+    }
+  </style>
+</html>

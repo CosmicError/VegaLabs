@@ -1,0 +1,412 @@
+---
+import fs from "fs";
+import path from "path";
+import { marked } from "marked"; // Markdown → HTML converter
+
+import Header from "../../components/Header.astro";
+import Sidebar from "../../components/Sidebar.astro";
+
+export async function getStaticPaths() {
+  const slugs = [
+    "reversing-multisim",
+    "reverse-engineering-lockdown-browser",
+    "reverse-engineering-minecraft-malware",
+  ];
+
+  return slugs.map((slug) => ({
+    params: { slug },
+  }));
+}
+
+const { slug } = Astro.params;
+
+// File paths
+const pdfPath = `/project-files/${slug}.pdf`;
+const pdfFile = path.resolve(`public/project-files/${slug}.pdf`);
+const mdFile = path.resolve(`src/content/projects/${slug}.md`);
+
+// Check existence
+const hasPdf = fs.existsSync(pdfFile);
+const hasMd = fs.existsSync(mdFile);
+
+// Load markdown if available (used only when PDF missing)
+let mdContent = "";
+if (!hasPdf && hasMd) {
+  const mdRaw = fs.readFileSync(mdFile, "utf-8");
+  mdContent = marked.parse(mdRaw);
+}
+
+const projectTitles = {
+  // slug: display title
+  "reversing-multisim": "Reversing Multisim",
+  "reverse-engineering-lockdown-browser":
+    "Reverse Engineering LockDown Browser",
+  "reverse-engineering-minecraft-malware":
+    "Reversing a Malicious Minecraft Forge Mod",
+};
+
+const projectRepos = {
+  // slug: repo URL
+  // "reversing-multisim": "https://github.com/JackVega/reversing-multisim",
+};
+
+const title = projectTitles[slug] || slug;
+const repoUrl = projectRepos[slug] || null;
+---
+
+<Header title={`${title} | Project Details`} />
+<body class="project-page">
+  <div class="content">
+    <Sidebar selectedItem="reverse-engineering" />
+    <div class="back-nav-container">
+      <a href="/reverse-engineering" class="back-nav-button w-inline-block">
+        <img
+          src="/assets/back.svg"
+          loading="lazy"
+          alt="Back"
+          class="back-nav-img"
+        />
+        <div>Back</div>
+      </a>
+    </div>
+    <main class="project-main">
+      <div id="re-disclaimer-overlay" class="re-overlay">
+        <div class="re-modal">
+          <h2>Reverse Engineering Disclaimer</h2>
+          <p>
+            The material on this page is provided for educational and research
+            purposes only. It is intended to illustrate analysis techniques, not
+            to enable unauthorized use of software or services. Do not apply
+            these techniques to systems you do not own or have explicit
+            permission to analyze.
+          </p>
+          <div class="re-modal-actions">
+            <button id="re-ack-btn" class="re-btn primary">
+              I Understand &amp; Acknowledge
+            </button>
+            <button id="re-cancel-btn" class="re-btn secondary">
+              Go Back
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <h1 class="project-title">{title}</h1>
+
+      <section class="download-links top-centered">
+        {
+          hasPdf ? (
+            <a href={pdfPath} download class="download-btn">
+              Download PDF
+            </a>
+          ) : hasMd ? (
+            <a href={`/content/projects/${slug}.md`} class="download-btn">
+              View Markdown
+            </a>
+          ) : (
+            <a class="download-btn" style="opacity:0.5; pointer-events:none;">
+              No File Available
+            </a>
+          )
+        }
+        {
+          repoUrl && (
+            <a
+              href={repoUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="download-btn repo-btn"
+            >
+              View GitHub Repo
+            </a>
+          )
+        }
+      </section>
+
+      {
+        hasPdf ? (
+          <section class="pdf-viewer">
+            <object
+              data={pdfPath}
+              type="application/pdf"
+              width="100%"
+              height="100%"
+            >
+              <p>Uh oh! Something went wrong loading the PDF file.</p>
+            </object>
+          </section>
+        ) : hasMd ? (
+          <section class="pdf-viewer markdown-fallback" set:html={mdContent} />
+        ) : (
+          <section class="pdf-viewer">
+            <p style="text-align:center; padding:2rem; color:#ccc;">
+              No PDF or Markdown file found for this project.
+            </p>
+          </section>
+        )
+      }
+    </main>
+  </div>
+
+  <style>
+    .project-page .content {
+      display: flex;
+      height: auto;
+      min-height: 100vh;
+      width: 100vw;
+      overflow: visible;
+    }
+
+    .project-main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      color: #fff;
+      overflow-y: auto;
+      padding: 2rem 2rem 4rem;
+
+      position: relative;
+
+      background-image: linear-gradient(
+          rgba(28, 28, 28, 0.64),
+          rgba(28, 28, 28, 0.64)
+        ),
+        url("/assets/grid-top-right.svg"),
+        linear-gradient(rgba(28, 28, 28, 0.24), rgba(28, 28, 28, 0.24));
+      background-position:
+        0 0,
+        0 0,
+        0 0;
+      background-size:
+        auto,
+        auto 1130px,
+        auto;
+    }
+
+    .back-nav-container {
+      z-index: 10;
+    }
+
+    .re-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+    }
+
+    .re-overlay.hidden {
+      display: none;
+    }
+
+    .re-modal {
+      max-width: 600px;
+      width: 90%;
+      background: #171717;
+      border-radius: 12px;
+      padding: 1.75rem 2rem 1.5rem;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .re-modal h2 {
+      margin: 0 0 0.75rem 0;
+      font-size: 1.25rem;
+    }
+
+    .re-modal p {
+      margin: 0 0 1.5rem 0;
+      font-size: 0.9rem;
+      line-height: 1.6;
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    .re-modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 0.75rem;
+    }
+
+    .re-btn {
+      border: none;
+      cursor: pointer;
+      padding: 0.5rem 1.1rem;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+
+    .re-btn.primary {
+      background: #222;
+      color: #fff;
+    }
+
+    .re-btn.primary:hover {
+      background: #444;
+    }
+
+    .re-btn.secondary {
+      background: transparent;
+      color: rgba(255, 255, 255, 0.75);
+    }
+
+    .re-btn.secondary:hover {
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .project-title {
+      font: inherit;
+      display: block;
+      text-align: center;
+      font-size: clamp(2rem, 3vw, 3.5rem);
+      font-weight: 400;
+      margin-bottom: 1.5rem;
+      margin-top: 3rem;
+    }
+
+    .project-title::after {
+      content: "";
+      display: block;
+      /* height: 2px; */
+      background: rgba(255, 255, 255, 0.15);
+      margin: 2rem auto 0 auto;
+      /* border-radius: 2px; */
+    }
+
+    .download-links {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 2rem;
+    }
+
+    .download-btn {
+      background: #222;
+      color: #fff;
+      padding: 0.6rem 1.4rem;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: 500;
+      letter-spacing: 0.3px;
+      transition: all 0.25s ease;
+    }
+
+    .download-btn:hover {
+      background: #444;
+      transform: translateY(-2px);
+    }
+
+    .repo-btn {
+      background: #0366d6; /* GitHub blue */
+      margin-left: 1rem;
+    }
+    .repo-btn:hover {
+      background: #2188ff;
+    }
+
+    .pdf-viewer {
+      position: relative;
+      width: 75%;
+      max-width: 85vw;
+      border-radius: 6px;
+      overflow: visible;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
+    }
+
+    .pdf-viewer::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      pointer-events: none;
+      box-shadow: 0 0 0 100vmax #000;
+      clip-path: inset(0 round 6px);
+    }
+
+    .pdf-viewer object {
+      width: 100%;
+      height: 120vh;
+      display: block;
+      border: none;
+      border-radius: inherit;
+      background: transparent;
+    }
+
+    @media (max-width: 900px) {
+      .pdf-viewer {
+        position: relative;
+        width: 95%;
+        max-width: 95vw;
+        border-radius: 6px;
+        overflow: hidden;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        margin-bottom: 2rem;
+      }
+
+      .pdf-viewer::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        pointer-events: none;
+        clip-path: inset(0 round 6px);
+      }
+
+      .pdf-viewer object {
+        width: 100%;
+        height: 80vh;
+        display: block;
+        border: none;
+        border-radius: inherit;
+        background: transparent;
+      }
+    }
+
+    .markdown-fallback {
+      padding: 2rem;
+      color: #ddd;
+      line-height: 1.6;
+    }
+
+    .markdown-fallback h1,
+    .markdown-fallback h2,
+    .markdown-fallback h3 {
+      color: #fff;
+    }
+  </style>
+
+  <script is:inline>
+    function setupDisclaimer() {
+      const overlay = document.getElementById("re-disclaimer-overlay");
+      if (!overlay) return;
+
+      const ackBtn = document.getElementById("re-ack-btn");
+      const cancelBtn = document.getElementById("re-cancel-btn");
+      if (!ackBtn || !cancelBtn) return;
+
+      // Show overlay and lock scroll
+      overlay.classList.remove("hidden");
+      document.body.style.overflow = "hidden";
+
+      // Attach handlers
+      ackBtn.onclick = () => {
+        overlay.classList.add("hidden");
+        document.body.style.overflow = "";
+      };
+
+      cancelBtn.onclick = () => {
+        if (window.history.length > 1) {
+          window.history.back();
+        } else {
+          window.location.href = "/reverse-engineering";
+        }
+      };
+    }
+
+    // Run on first page load and on every client-side navigation
+    document.addEventListener("astro:page-load", setupDisclaimer);
+  </script>
+</body>

@@ -1,0 +1,104 @@
+---
+import Header from "../components/Header.astro";
+import Project from "../components/Project.astro";
+import Sidebar from "../components/Sidebar.astro";
+const projects = [
+  {
+    title: "Portfolio & Resume Site",
+    slug: "portfolio-site",
+    desc: [
+      "Developed a fully responsive, static-generated portfolio using Astro and modern web standards.",
+      "Implemented dynamic content loading with Markdown and static file serving for PDFs and docs.",
+      "Integrated project categorization (Reverse Engineering / Software Development) with reusable components.",
+    ],
+    tech: ["Astro", "TypeScript", "CSS", "Markdown"],
+  },
+  {
+    title: "16‑Bit Custom CPU",
+    slug: "16-bit-custom-cpu",
+    desc: [
+      "Designed and implemented a simple 16‑bit CPU with a custom instruction set architecture (ISA).",
+      "Developed a modular multi‑pass assembler in Python for translation and linking of binary code.",
+      "Implemented instruction encoding, branching logic, and debugging utilities for architecture validation.",
+      "Demonstrated deep understanding of low‑level computer architecture and binary instruction execution."
+    ],
+    tech: ["Python", "Assembly", "Rust", "Computer Architecture", "CPU Design", "Assembler Development"]
+  },
+  {
+    title: "Custom Sudoku Solver",
+    slug: "custom-sudoku-solver",
+    desc: [
+      "Engineered a constraint-based Sudoku solver leveraging bitmask logic for high-efficiency computation.",
+      "Optimized recursion and elimination algorithms to achieve microsecond-level solve times.",
+      "Showcased advanced algorithm optimization techniques and performance profiling in Rust."
+    ],
+    tech: ["Rust", "Algorithm Optimization", "Bitmask Logic", "Performance Engineering"]
+  },
+  {
+    title: "KSU-AUV Ground Control Station",
+    slug: "ksu-auv-gcs",
+    desc: [
+      "Built a real-time control and telemetry interface for an autonomous underwater vehicle (AUV).",
+      "Developed a GUI using C# WinForms to manage mission planning, data visualization, and diagnostics.",
+      "Integrated multiple sensor streams and communication protocols for synchronized hardware control.",
+      "Collaborated with cross-disciplinary mechanical and AI teams for system testing and optimization."
+    ],
+    tech: ["C#", "WinForms", "GUI Development"]
+  },
+];
+---
+
+<!doctype html>
+<html>
+  <Header title="Software Development | Jack Vega" />
+  <body>
+    <div class="content">
+      <Sidebar selectedItem="software-development" />
+      <div class="back-nav-container">
+        <a href="/" class="back-nav-button w-inline-block"
+          ><img
+            src="/assets/back.svg"
+            loading="lazy"
+            alt=""
+            class="back-nav-img"
+          />
+          <div>Back</div></a
+        >
+      </div>
+      <nav class="main">
+        <div class="container">
+          <div class="content-container">
+            <h1>Software Development</h1>
+            <section class="items-container">
+              <div class="resource-items">
+                {
+                  projects.map((project) => (
+                    <a href={`/projects/${project.slug}`} class="project-card">
+                      <Project
+                        title={project.title}
+                        desc={project.desc}
+                        tech={project.tech}
+                      />
+                    </a>
+                  ))
+                }
+              </div>
+            </section>
+          </div>
+        </div>
+      </nav>
+    </div>
+
+    <!--[if lte IE 9]><script src="//cdnjs.cloudflare.com/ajax/libs/placeholders/3.0.2/placeholders.min.js"></script><![endif]-->
+  </body><style>
+    .main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      color: #fff;
+      overflow-y: auto;
+      padding: 2rem 2rem 4rem;
+    }
+  </style>
+</html>
