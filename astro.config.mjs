@@ -4,5 +4,10 @@ import cloudflare from '@astrojs/cloudflare';
 
 // https://astro.build/config
 export default defineConfig({
-  adapter: cloudflare({ pages: true })
+  adapter: cloudflare({ pages: true }),
+  vite: {
+    build: {
+      minify: false,
+    },
+  },
 });
