@@ -207,10 +207,10 @@ ul {
     left: 0;
     right: 0;
     top: 92px;
-    background: white;
+    background: #1c1c1c;
     transform: translateY(-50%);
     opacity: 0;
-    transition: transform 250ms ease, opacity 250ms ease;
+    transition: none;
     will-change: transform, opacity;
   }
 

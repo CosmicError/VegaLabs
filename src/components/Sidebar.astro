@@ -88,22 +88,22 @@ const { selectedItem } = Astro.props;
         />
         <div>Software development</div>
       </a>
+      <a
+        href="/credits"
+        class={`nav-link-container w-inline-block sidebar-bottom-link ${
+          selectedItem === "credits" ? "w--current" : ""
+        }`}
+        aria-current={selectedItem === "credits" ? "page" : undefined}
+      >
+        <img
+          src="/assets/credits.svg"
+          loading="eager"
+          alt=""
+          class="nav-link-image"
+        />
+        <div>Credits</div>
+      </a>
     </nav>
-    <a
-      href="/credits"
-      class={`nav-link-container w-inline-block sidebar-bottom-link ${
-        selectedItem === "credits" ? "w--current" : ""
-      }`}
-      aria-current={selectedItem === "credits" ? "page" : undefined}
-    >
-      <img
-        src="/assets/credits.svg"
-        loading="eager"
-        alt=""
-        class="nav-link-image"
-      />
-      <div>Credits</div>
-    </a>
 
     <div
       class="navbar-icon-button w-nav-button"
@@ -142,5 +142,35 @@ const { selectedItem } = Astro.props;
       flex-direction: column;
       flex: 1;
     }
+
+    .w-nav-menu {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+
+    .sidebar-bottom-link {
+      margin-top: auto;
+      padding-top: 1rem;
+    }
   </style>
+
+  <!-- Attempt to fix mobile nav bar :( -->
+  <script is:inline>
+  document.addEventListener("astro:page-load", () => {
+    const navMenu = document.querySelector(".w-nav-menu");
+    const navButton = document.querySelector(".w-nav-button");
+
+    if (!navButton || !navMenu) return;
+
+    navButton.addEventListener("click", () => {
+
+      setTimeout(() => {
+        if (!navButton.classList.contains("w--open")) {
+          navMenu.classList.remove("is-open");
+        }
+      }, 0);
+    });
+  });
+</script>
 </aside>
