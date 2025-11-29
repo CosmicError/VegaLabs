@@ -97,5 +97,23 @@ const resumes = [
       overflow-y: auto;
       padding: 2rem 2rem 4rem;
     }
+
+    .main h1 {
+      position: relative;
+      display: inline-block;
+      text-align: left;
+      color: #fff;
+    }
+
+    .main h1::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -0.5rem;
+      width: 30%;
+      height: 3px;
+      background: rgba(120, 226, 160, 0.8);
+      border-radius: 2px;
+    }
   </style>
 </html>

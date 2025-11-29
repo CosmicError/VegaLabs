@@ -1,7 +1,7 @@
 ---
 import fs from "fs";
 import path from "path";
-import { marked } from "marked"; // Markdown → HTML converter
+import { marked } from "marked";
 
 import Header from "../../components/Header.astro";
 import Sidebar from "../../components/Sidebar.astro";
@@ -270,10 +270,8 @@ const repoUrl = projectRepos[slug] || null;
     .project-title::after {
       content: "";
       display: block;
-      /* height: 2px; */
       background: rgba(255, 255, 255, 0.15);
       margin: 2rem auto 0 auto;
-      /* border-radius: 2px; */
     }
 
     .download-links {
@@ -406,7 +404,6 @@ const repoUrl = projectRepos[slug] || null;
       };
     }
 
-    // Run on first page load and on every client-side navigation
     document.addEventListener("astro:page-load", setupDisclaimer);
   </script>
 </body>

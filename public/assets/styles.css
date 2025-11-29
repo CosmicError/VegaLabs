@@ -409,7 +409,7 @@ p {
 
 .single-chip {
   color: #fff;
-  background-color: #353535;
+  background-color: rgba(120, 226, 160, 0.6);
   border-radius: 8px;
   padding: 8px 12px;
   font-family: IBM Plex Mono, sans-serif;
