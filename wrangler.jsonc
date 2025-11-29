@@ -1,6 +1,6 @@
 {
 	"main": "dist/_worker.js/index.js",
-	"name": "VegaLabs",
+	"name": "vegalabs",
   "compatibility_date": "2025-11-29",
   "compatibility_flags": [
     "nodejs_compat",
